@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+: "${GITHUB_TOKEN?Need a repository token}"
+: "${GITHUB_REPO?Need a repository name}"
+: "${GITHUB_USER?Need a GitHub username}"
+: "${GITHUB_BRANCH:=master}"
+: "${REPO_DIR:=.}"
+: "${MAVEN_CLEAN_TARGET:=clean}"
+: "${MAVEN_TEST_TARGET:=test}"
+: "${MAVEN_BUILD_TARGET:=package}"
+: "${GITHUB_RELEASE_BIN:=https://github.com/aktau/github-release/releases/download/v0.6.2/linux-amd64-github-release.tar.bz2}"
+
+set -xe
+# Clone repo and get inside
+git clone                                                                      \
+    -b "$GITHUB_BRANCH"                                                        \
+    https://github.com/"$GITHUB_USER"/"$GITHUB_REPO".git                       \
+    /srv/"$GITHUB_REPO"
+cd /srv/"$GITHUB_REPO"/"$REPO_DIR"
+
+# Perform maven unit tests and build artifact if successful
+mvn $MAVEN_CLEAN_TARGET $MAVEN_TEST_TARGET
+mvn $MAVEN_CLEAN_TARGET $MAVEN_BUILD_TARGET
+
+# Get github-release binary and install in /usr/local/bin
+wget -qO-                                                                      \
+     "$GITHUB_RELEASE_BIN"                                                     \
+| tar xjv                                                                      \
+     -C /usr/local/bin                                                         \
+     --strip-components=3
+
+# Extract artifact name and version from pom.xml
+VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate \
+                     -Dexpression=project.version                              \
+                 | grep -Ev '(^\[|Download\w+:)')
+
+TARGET=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate  \
+                    -Dexpression=project.name                                  \
+                | grep -Ev '(^\[|Download\w+:)')
+
+# Upload new release to github repo using user token
+github-release                                                                 \
+    release                                                                    \
+    --user "$GITHUB_USER"                                                      \
+    --repo "$GITHUB_REPO"                                                      \
+    --tag "v$VERSION"                                                          \
+    --name "v$VERSION"                                                         \
+    --description "v$VERSION"
+
+github-release                                                                 \
+    upload                                                                     \
+    --user "$GITHUB_USER"                                                      \
+    --repo "$GITHUB_REPO"                                                      \
+    --tag "v$VERSION"                                                          \
+    --name "$TARGET-linux-amd64"                                               \
+    --file "/srv/$GITHUB_REPO/$REPO_DIR/target/$TARGET-$VERSION.jar"

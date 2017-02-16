@@ -1,0 +1,12 @@
+docker run                                                                     \
+  --rm                                                                         \
+  -e GITHUB_TOKEN=$GITHUB_TOKEN                                                \
+  -e GITHUB_REPO=$GITHUB_REPO                                                  \
+  -e GITHUB_USER=$GITHUB_USER                                                  \
+  -e GITHUB_BRANCH=$GITHUB_BRANCH                                              \
+  -e REPO_DIR=$REPO_DIR                                                        \
+  -e MAVEN_CLEAN_TARGET=$MAVEN_CLEAN_TARGET                                    \
+  -e MAVEN_TEST_TARGET=$MAVEN_TEST_TARGET                                      \
+  -e MAVEN_BUILD_TARGET=$MAVEN_BUILD_TARGET                                    \
+  -e GITHUB_RELEASE_BIN=$GITHUB_RELEASE_BIN                                    \
+  4km3/alpine-maven-builder
