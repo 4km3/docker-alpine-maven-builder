@@ -17,7 +17,6 @@ $ docker build -t 4km3/alpine-maven-builder .
 : "${MAVEN_CLEAN_TARGET:=clean}" 
 : "${MAVEN_TEST_TARGET:=test}" 
 : "${MAVEN_BUILD_TARGET:=package}" 
-: "${GITHUB_RELEASE_BIN:=https://github.com/aktau/github-release/releases/download/v0.6.2/linux-amd64-github-release.tar.bz2}" 
 ```
 ### Recommended values
 By passing these values when running:

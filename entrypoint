@@ -8,7 +8,6 @@
 : "${MAVEN_CLEAN_TARGET:=clean}"
 : "${MAVEN_TEST_TARGET:=test}"
 : "${MAVEN_BUILD_TARGET:=package}"
-: "${GITHUB_RELEASE_BIN:=https://github.com/aktau/github-release/releases/download/v0.6.2/linux-amd64-github-release.tar.bz2}"
 
 set -xe
 # Clone repo and get inside
@@ -21,13 +20,6 @@ cd /srv/"$GITHUB_REPO"/"$REPO_DIR"
 # Perform maven unit tests and build artifact if successful
 mvn $MAVEN_CLEAN_TARGET $MAVEN_TEST_TARGET
 mvn $MAVEN_CLEAN_TARGET $MAVEN_BUILD_TARGET
-
-# Get github-release binary and install in /usr/local/bin
-wget -qO-                                                                      \
-     "$GITHUB_RELEASE_BIN"                                                     \
-| tar xjv                                                                      \
-     -C /usr/local/bin                                                         \
-     --strip-components=3
 
 # Extract artifact name and version from pom.xml
 VERSION=$(xpath -q -e '/project/version/text()' pom.xml)
