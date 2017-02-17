@@ -30,13 +30,8 @@ wget -qO-                                                                      \
      --strip-components=3
 
 # Extract artifact name and version from pom.xml
-VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate \
-                     -Dexpression=project.version                              \
-                 | grep -Ev '(^\[|Download\w+:)')
-
-TARGET=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate  \
-                    -Dexpression=project.name                                  \
-                | grep -Ev '(^\[|Download\w+:)')
+VERSION=$(xpath -q -e '/project/version/text()' pom.xml)
+TARGET=$(xpath -q -e '/project/artifactId/text()' pom.xml)
 
 # Upload new release to github repo using user token
 github-release                                                                 \
