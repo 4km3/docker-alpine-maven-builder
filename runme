@@ -11,4 +11,4 @@ docker run                                                                     \
   -e MAVEN_TEST_TARGET=$MAVEN_TEST_TARGET                                      \
   -e MAVEN_BUILD_TARGET=$MAVEN_BUILD_TARGET                                    \
   -e GITHUB_RELEASE_BIN=$GITHUB_RELEASE_BIN                                    \
-  4km3/alpine-maven-builder
+  4km3/maven-builder
