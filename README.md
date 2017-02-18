@@ -3,7 +3,7 @@ Test and build a Java project using Apache Maven, complete with upload to GitHub
 
 ## Building
 ```console
-$ docker build -t 4km3/alpine-maven-builder .
+$ docker build -t 4km3/maven-builder .
 ```
 ## Configuration
 ### Default values
@@ -40,7 +40,7 @@ $ docker run                                                                    
     -e MAVEN_TEST_TARGET=$MAVEN_TEST_TARGET                                      \
     -e MAVEN_BUILD_TARGET=$MAVEN_BUILD_TARGET                                    \
     -e GITHUB_RELEASE_BIN=$GITHUB_RELEASE_BIN                                    \
-    4km3/alpine-maven-builder
+    4km3/maven-builder
 ```
 Also a runme script is provided for convenience
 
