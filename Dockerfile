@@ -1,4 +1,4 @@
-FROM rawmind/alpine-maven:3.3.9-1
+FROM rawmind/hms-maven:3.3.9
 MAINTAINER Rodrigo de la Fuente <rodrigo@delafuente.email>
 
 LABEL Description="Alpine Maven Builder"                                       \
